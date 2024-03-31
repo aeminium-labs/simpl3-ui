@@ -21,7 +21,7 @@ const formSchema = z.object({
 });
 
 export function WaitingPin() {
-    const { AuthContext } = useSimpl3Auth({ appId: "simpl3" });
+    const { AuthContext } = useSimpl3Auth();
     const { send } = React.useContext(AuthContext);
 
     const form = useForm<z.infer<typeof formSchema>>({

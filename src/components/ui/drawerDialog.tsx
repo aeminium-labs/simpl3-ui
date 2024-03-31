@@ -21,7 +21,7 @@ export function DrawerDialog({
                 open={open}
                 onOpenChange={(open) => !open && onClose && onClose()}
             >
-                <DialogContent className="p-6 rounded-lg">
+                <DialogContent className="p-6 rounded-lg sm:max-w-[425px]">
                     {children}
                     <DialogFooter className="pt-6 text-center text-xs text-slate-300 sm:justify-center font-semibold ">
                         powered by simpl3

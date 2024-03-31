@@ -22,9 +22,7 @@ const formSchema = z.object({
 });
 
 export function WaitingOTP({ email }: { email?: string }) {
-    const { AuthContext } = useSimpl3Auth({
-        appId: "simpl3",
-    });
+    const { AuthContext } = useSimpl3Auth();
     const { send } = React.useContext(AuthContext);
 
     const form = useForm<z.infer<typeof formSchema>>({

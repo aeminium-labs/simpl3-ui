@@ -3,7 +3,7 @@ import { useSimpl3Auth } from "@/simpl3Auth";
 import React from "react";
 
 export function RegisteringId() {
-    const { AuthContext } = useSimpl3Auth({ appId: "simpl3" });
+    const { AuthContext } = useSimpl3Auth();
     const { send } = React.useContext(AuthContext);
 
     return (

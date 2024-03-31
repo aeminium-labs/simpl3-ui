@@ -1,6 +1,6 @@
 import { authMachine } from "@/authMachine";
 import { shallowEqual, useActorRef, useSelector } from "@xstate/react";
-import React from "react";
+import * as React from "react";
 import { Idle } from "@/components/states/idle";
 import { RegisteringId } from "@/components/states/registeringId";
 import { WaitingOTP } from "@/components/states/waitingOTP";
@@ -11,25 +11,26 @@ import { Loading } from "@/components/states/loading";
 import { DrawerDialog } from "@/components/ui/drawerDialog";
 import { Actor } from "xstate";
 
-const AuthContext = React.createContext<Actor<typeof authMachine>>(
+const AuthMachineContext = React.createContext<Actor<typeof authMachine>>(
     {} as Actor<typeof authMachine>,
 );
 
-function Auth({ open, onClose }: { open: boolean; onClose?: () => void }) {
-    const actorRef = React.useContext(AuthContext);
-    const state = useSelector(actorRef, (state) => state, shallowEqual);
-    const [_open, setOpen] = React.useState(
-        (state.value !== "loggedIn" && open) || false,
-    );
+const AuthModalContext = React.createContext<{
+    open?: boolean;
+    setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}>({});
 
-    React.useEffect(() => {
-        if (state.value === "loggedIn") {
-            setOpen(false);
-        }
-    }, [state.value]);
+const LoggedInContext = React.createContext<{
+    isLoggedIn?: boolean;
+    setIsLoggedIn?: React.Dispatch<React.SetStateAction<boolean>>;
+}>({});
+
+function Auth({ open, onClose }: { open: boolean; onClose?: () => void }) {
+    const actorRef = React.useContext(AuthMachineContext);
+    const state = useSelector(actorRef, (state) => state, shallowEqual);
 
     return (
-        <DrawerDialog open={_open} onClose={onClose} forceDialog={true}>
+        <DrawerDialog open={open} onClose={onClose} forceDialog={true}>
             {state.matches("idle") && <Idle />}
             {state.matches("validatingId") && (
                 <Loading message="Checking your email" />
@@ -57,50 +58,47 @@ function Auth({ open, onClose }: { open: boolean; onClose?: () => void }) {
     );
 }
 
-function State() {
-    const actorRef = React.useContext(AuthContext);
-    const state = useSelector(actorRef, (state) => state, shallowEqual);
+export function Simpl3AuthProvider({
+    appId,
+    children,
+}: {
+    appId: string;
+    children: React.ReactNode;
+}) {
+    const actorRef = useActorRef(authMachine, { input: { appId } });
+    const [open, setOpen] = React.useState(false);
+    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
     return (
-        <code className="text-xs mt-12">
-            <pre>{JSON.stringify(state, null, 2)}</pre>
-        </code>
+        <AuthMachineContext.Provider value={actorRef}>
+            <AuthModalContext.Provider value={{ open, setOpen }}>
+                <LoggedInContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+                    <Auth open={open} onClose={() => setOpen(false)} />
+                    {children}
+                </LoggedInContext.Provider>
+            </AuthModalContext.Provider>
+        </AuthMachineContext.Provider>
     );
 }
 
-type UseSimpl3AuthArgs = {
-    appId: string;
-    debug?: boolean;
-};
-
-export function useSimpl3Auth({ appId, debug = false }: UseSimpl3AuthArgs) {
-    const [open, setOpen] = React.useState(false);
-    const actorRef = useActorRef(authMachine, { input: { appId } });
-    const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false);
+export function useSimpl3Auth() {
+    const { setOpen } = React.useContext(AuthModalContext);
+    const actorRef = React.useContext(AuthMachineContext);
+    const { isLoggedIn, setIsLoggedIn } = React.useContext(LoggedInContext);
 
     actorRef.subscribe((snapshot) => {
         if (snapshot.value === "loggedIn") {
-            setIsLoggedIn(true);
-            setOpen(false);
+            setIsLoggedIn && setIsLoggedIn(true);
+            setOpen && setOpen(false);
         } else {
-            setIsLoggedIn(false);
+            setIsLoggedIn && setIsLoggedIn(false);
         }
     });
 
-    function Simpl3AuthProvider({ children }: { children: React.ReactNode }) {
-        return (
-            <AuthContext.Provider value={actorRef}>
-                <Auth open={open} onClose={() => setOpen(false)} />
-                {children}
-                {debug && <State />}
-            </AuthContext.Provider>
-        );
-    }
-
     return {
-        AuthContext,
-        Simpl3AuthProvider,
+        AuthContext: AuthMachineContext,
         isLoggedIn,
-        openAuth: () => setOpen(true),
+        openAuth: () => setOpen && setOpen(true),
         logout: () => {
             console.log("LOGOUT");
             if (isLoggedIn) {
