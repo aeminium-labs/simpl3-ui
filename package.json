@@ -1,6 +1,5 @@
 {
     "name": "@simpl3/ui",
-    "private": true,
     "version": "0.0.0",
     "type": "module",
     "main": "dist/index.cjs.js",
