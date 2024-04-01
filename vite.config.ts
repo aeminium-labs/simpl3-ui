@@ -25,7 +25,6 @@ export default defineConfig({
                 ...Object.keys(peerDependencies),
                 ...Object.keys(dependencies),
             ],
-            output: { preserveModules: true, exports: "named" },
         },
 
         target: "esnext",

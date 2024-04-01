@@ -37,7 +37,6 @@
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.0",
         "input-otp": "^1.2.3",
-        "lucide-react": "^0.363.0",
         "react-hook-form": "7.51.2",
         "tailwind-merge": "^2.2.2",
         "tailwindcss-animate": "^1.0.7",

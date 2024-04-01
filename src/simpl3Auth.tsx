@@ -1,4 +1,4 @@
-import { authMachine } from "@/authMachine";
+import { authMachine } from "@/machines/auth.machine";
 import { shallowEqual, useActorRef, useSelector } from "@xstate/react";
 import * as React from "react";
 import { Idle } from "@/components/states/idle";
@@ -10,6 +10,7 @@ import { WaitingPin } from "@/components/states/waitingPin";
 import { Loading } from "@/components/states/loading";
 import { DrawerDialog } from "@/components/ui/drawerDialog";
 import { Actor } from "xstate";
+import { LoggedIn } from "@/components/states/loggedIn";
 
 const AuthMachineContext = React.createContext<Actor<typeof authMachine>>(
     {} as Actor<typeof authMachine>,
@@ -54,6 +55,7 @@ function Auth({ open, onClose }: { open: boolean; onClose?: () => void }) {
             {state.matches("validatingPin") && (
                 <Loading message="Validating pin" />
             )}
+            {state.matches("loggedIn") && <LoggedIn message="Welcome!" />}
         </DrawerDialog>
     );
 }
@@ -87,11 +89,22 @@ export function useSimpl3Auth() {
     const { isLoggedIn, setIsLoggedIn } = React.useContext(LoggedInContext);
 
     actorRef.subscribe((snapshot) => {
-        if (snapshot.value === "loggedIn") {
-            setIsLoggedIn && setIsLoggedIn(true);
-            setOpen && setOpen(false);
+        if (
+            snapshot.value === "loggedIn" ||
+            snapshot.value === "loggedInIdle"
+        ) {
+            if (!isLoggedIn) {
+                setIsLoggedIn && setIsLoggedIn(true);
+            }
+
+            // Automatically close dialog
+            if (snapshot.value === "loggedInIdle") {
+                setOpen && setOpen(false);
+            }
         } else {
-            setIsLoggedIn && setIsLoggedIn(false);
+            if (isLoggedIn) {
+                setIsLoggedIn && setIsLoggedIn(false);
+            }
         }
     });
 

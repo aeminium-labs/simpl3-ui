@@ -23,7 +23,7 @@ export function DrawerDialog({
             >
                 <DialogContent className="p-6 rounded-lg sm:max-w-[425px]">
                     {children}
-                    <DialogFooter className="pt-6 text-center text-xs text-slate-300 sm:justify-center font-semibold ">
+                    <DialogFooter className="pt-6 text-center text-xs text-slate-300 sm:justify-center">
                         powered by simpl3
                     </DialogFooter>
                 </DialogContent>
