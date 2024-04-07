@@ -10,7 +10,7 @@ const InputOTP = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <OTPInput
         ref={ref}
-        containerClassName={cn("flex items-center gap-2", className)}
+        containerClassName={cn("s3-flex s3-items-center s3-gap-2", className)}
         {...props}
     />
 ));

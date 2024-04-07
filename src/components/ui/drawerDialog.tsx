@@ -34,7 +34,7 @@ export function DrawerDialog({
     return (
         <Drawer open={open} dismissible={false}>
             <DrawerContent>
-                <div className="s3-mt-8 s3-px-6 s3-flex s3-flex-colitems-center s3-justify-center">
+                <div className="s3-mt-8 s3-px-6 s3-flex s3-flex-col s3-items-center s3-justify-center">
                     {children}
                 </div>
                 <DrawerFooter className="s3-py-6 s3-text-center s3-text-xs s3-text-muted-foreground">
