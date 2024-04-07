@@ -39,22 +39,22 @@ export function ConfirmingPin() {
     }
 
     return (
-        <div className="flex flex-col gap-6 w-full">
-            <div className="text-center space-y-1">
-                <h3 className="scroll-m-20 text-xl font-bold tracking-tight">
+        <div className="s3-flex s3-flex-col s3-gap-6 s3-w-full">
+            <div className="s3-text-center s3-space-y-1">
+                <h3 className="s3-scroll-m-20 s3-text-xl s3-font-bold s3-tracking-tight">
                     Confirm your pin code
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="s3-text-sm s3-text-muted-foreground">
                     Re-enter the pin code you setup in the previous step
                 </p>
             </div>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="flex flex-col gap-6 w-full"
+                    className="s3-flex s3-flex-col s3-gap-6 s3-w-full"
                 >
-                    <div className="grid w-full items-center gap-4">
-                        <div className="flex flex-col space-y-1.5">
+                    <div className="s3-grid s3-w-full s3-items-center s3-gap-4">
+                        <div className="s3-flex s3-flex-col s3-space-y-1.5">
                             <FormField
                                 control={form.control}
                                 name="pin"
@@ -68,7 +68,7 @@ export function ConfirmingPin() {
                                                 )}
                                                 inputMode="numeric"
                                                 pushPasswordManagerStrategy="none"
-                                                className="justify-center"
+                                                className="s3-justify-center"
                                                 autoFocus={true}
                                                 render={({ slots }) => (
                                                     <InputOTPGroup>
@@ -76,7 +76,7 @@ export function ConfirmingPin() {
                                                             (slot, index) => (
                                                                 <InputOTPSlot
                                                                     key={index}
-                                                                    className="w-10 h-10 text-xl"
+                                                                    className="s3-w-10 s3-h-10 s3-text-xl"
                                                                     {...slot}
                                                                     char={
                                                                         slot.char

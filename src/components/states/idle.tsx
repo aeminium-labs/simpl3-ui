@@ -37,22 +37,22 @@ export function Idle() {
     }
 
     return (
-        <div className="flex flex-col gap-6 w-full">
-            <div className="text-center space-y-1">
-                <h3 className="scroll-m-20 text-xl font-bold tracking-tight">
+        <div className="s3-flex s3-flex-col s3-gap-6 s3-w-full">
+            <div className="s3-text-center s3-space-y-1">
+                <h3 className="s3-scroll-m-20 s3-text-xl s3-font-bold s3-tracking-tight">
                     Sign-in to your account
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="s3-text-sm s3-text-muted-foreground">
                     Please enter your email address
                 </p>
             </div>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="flex flex-col gap-6 w-full"
+                    className="s3-flex s3-flex-col s3-gap-6 s3-w-full"
                 >
-                    <div className="grid w-full items-center gap-4">
-                        <div className="flex flex-col space-y-1.5">
+                    <div className="s3-grid s3-w-full s3-items-center s3-gap-4">
+                        <div className="s3-flex s3-flex-col s3-space-y-1.5">
                             <FormField
                                 control={form.control}
                                 name="email"
@@ -64,7 +64,7 @@ export function Idle() {
                                                 type="email"
                                                 placeholder="you@madesimpl3.com"
                                                 autoComplete="off"
-                                                className="h-12 text-lg"
+                                                className="s3-h-12 s3-text-lg"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -74,7 +74,7 @@ export function Idle() {
                             />
                         </div>
                     </div>
-                    <Button type="submit" className="w-full" size="lg">
+                    <Button type="submit" className="s3-w-full" size="lg">
                         Continue
                     </Button>
                 </form>

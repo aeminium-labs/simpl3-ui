@@ -7,16 +7,16 @@ export function RegisteringId() {
     const { send } = React.useContext(AuthContext);
 
     return (
-        <div className="flex flex-col gap-16">
-            <div className="text-center space-y-1">
-                <h3 className="scroll-m-20 text-xl font-bold tracking-tight">
+        <div className="s3-flex s3-flex-col s3-gap-16">
+            <div className="s3-text-center s3-space-y-1">
+                <h3 className="s3-scroll-m-20 s3-text-xl s3-font-bold s3-tracking-tight">
                     Hey there!
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="s3-text-sm s3-text-muted-foreground">
                     Seems like you&apos;re new here 👀
                 </p>
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="s3-flex s3-flex-col s3-gap-1">
                 <Button
                     variant="default"
                     size="lg"
@@ -28,7 +28,7 @@ export function RegisteringId() {
                 </Button>
                 <Button
                     variant="link"
-                    className="text-xs"
+                    className="s3-text-xs"
                     onClick={() => {
                         send({ type: "reject" });
                     }}

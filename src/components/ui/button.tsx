@@ -5,26 +5,26 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-    "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+    "s3-inline-flex s3-items-center s3-justify-center s3-whitespace-nowrap s3-rounded-md s3-text-sm s3-font-medium s3-transition-colors focus-visible:s3-outline-none focus-visible:s3-ring-1 focus-visible:s3-ring-ring disabled:s3-pointer-events-none disabled:s3-opacity-50",
     {
         variants: {
             variant: {
                 default:
-                    "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+                    "s3-bg-primary s3-text-primary-foreground s3-shadow hover:s3-bg-primary/90",
                 destructive:
-                    "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+                    "s3-bg-destructive s3-text-destructive-foreground s3-shadow-sm hover:s3-bg-destructive/90",
                 outline:
-                    "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+                    "s3-border s3-border-input s3-bg-background s3-shadow-sm hover:s3-bg-accent hover:s3-text-accent-foreground",
                 secondary:
-                    "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-                ghost: "hover:bg-accent hover:text-accent-foreground",
-                link: "text-primary underline-offset-4 hover:underline",
+                    "s3-bg-secondary s3-text-secondary-foreground s3-shadow-sm hover:s3-bg-secondary/80",
+                ghost: "hover:s3-bg-accent hover:s3-text-accent-foreground",
+                link: "s3-text-primary s3-underline-offset-4 hover:s3-underline",
             },
             size: {
-                default: "h-9 px-4 py-2",
-                sm: "h-8 rounded-md px-3 text-xs",
-                lg: "h-10 rounded-md px-8",
-                icon: "h-9 w-9",
+                default: "s3-h-9 s3-px-4 s3-py-2",
+                sm: "s3-h-8 s3-rounded-md s3-px-3 s3-text-xs",
+                lg: "s3-h-10 s3-rounded-md s3-px-8",
+                icon: "s3-h-9 s3-w-9",
             },
         },
         defaultVariants: {
@@ -36,7 +36,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-        VariantProps<typeof buttonVariants> {
+    VariantProps<typeof buttonVariants> {
     asChild?: boolean;
 }
 

@@ -19,7 +19,7 @@ const DialogOverlay = React.forwardRef<
     <DialogPrimitive.Overlay
         ref={ref}
         className={cn(
-            "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+            "s3-fixed s3-inset-0 s3-z-50 s3-bg-black/80  data-[state=open]:s3-animate-in data-[state=closed]:s3-animate-out data-[state=closed]:s3-fade-out-0 data-[state=open]:s3-fade-in-0",
             className,
         )}
         {...props}
@@ -36,15 +36,15 @@ const DialogContent = React.forwardRef<
         <DialogPrimitive.Content
             ref={ref}
             className={cn(
-                "fixed inset-x-0 mx-auto top-[5%] z-50 grid w-full max-w-[95%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95  data-[state=closed]:slide-out-to-top-[10%] data-[state=open]:slide-in-from-top-[10%] sm:rounded-lg",
+                "s3-fixed s3-inset-x-0 s3-mx-auto s3-top-[5%] s3-z-50 s3-grid s3-w-full s3-max-w-[95%] s3-gap-4 s3-border s3-bg-background s3-p-6 s3-shadow-lg s3-duration-200 data-[state=open]:s3-animate-in data-[state=closed]:s3-animate-out data-[state=closed]:s3-fade-out-0 data-[state=open]:s3-fade-in-0 data-[state=closed]:s3-zoom-out-95 data-[state=open]:s3-zoom-in-95  data-[state=closed]:s3-slide-out-to-top-[10%] data-[state=open]:s3-slide-in-from-top-[10%] sm:s3-rounded-lg",
                 className,
             )}
             {...props}
         >
             {children}
-            <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-                <Cross2Icon className="h-4 w-4" />
-                <span className="sr-only">Close</span>
+            <DialogPrimitive.Close className="s3-absolute s3-right-4 s3-top-4 s3-rounded-sm s3-opacity-70 s3-ring-offset-background s3-transition-opacity hover:s3-opacity-100 focus:s3-outline-none focus:s3-ring-2 focus:s3-ring-ring focus:s3-ring-offset-2 disabled:s3-pointer-events-none data-[state=open]:s3-bg-accent data-[state=open]:s3-text-muted-foreground">
+                <Cross2Icon className="s3-h-4 s3-w-4" />
+                <span className="s3-sr-only">Close</span>
             </DialogPrimitive.Close>
         </DialogPrimitive.Content>
     </DialogPortal>
@@ -57,7 +57,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
     <div
         className={cn(
-            "flex flex-col space-y-1.5 text-center sm:text-left",
+            "s3-flex s3-flex-col s3-space-y-1.5 s3-text-center sm:s3-text-left",
             className,
         )}
         {...props}
@@ -71,7 +71,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
     <div
         className={cn(
-            "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+            "s3-flex s3-flex-col-reverse sm:s3-flex-row sm:s3-justify-end sm:s3-space-x-2",
             className,
         )}
         {...props}
@@ -86,7 +86,7 @@ const DialogTitle = React.forwardRef<
     <DialogPrimitive.Title
         ref={ref}
         className={cn(
-            "text-lg font-semibold leading-none tracking-tight",
+            "s3-text-lg s3-font-semibold s3-leading-none s3-tracking-tight",
             className,
         )}
         {...props}
@@ -100,7 +100,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DialogPrimitive.Description
         ref={ref}
-        className={cn("text-sm text-muted-foreground", className)}
+        className={cn("s3-text-sm s3-text-muted-foreground", className)}
         {...props}
     />
 ));

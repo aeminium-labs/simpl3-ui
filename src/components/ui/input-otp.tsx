@@ -20,7 +20,7 @@ const InputOTPGroup = React.forwardRef<
     React.ElementRef<"div">,
     React.ComponentPropsWithoutRef<"div">
 >(({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex items-center", className)} {...props} />
+    <div ref={ref} className={cn("s3-flex s3-items-center", className)} {...props} />
 ));
 InputOTPGroup.displayName = "InputOTPGroup";
 
@@ -32,16 +32,16 @@ const InputOTPSlot = React.forwardRef<
         <div
             ref={ref}
             className={cn(
-                "relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
-                isActive && "z-10 ring-1 ring-ring",
+                "s3-relative s3-flex s3-h-9 s3-w-9 s3-items-center s3-justify-center s3-border-y s3-border-r s3-border-input s3-text-sm s3-shadow-sm s3-transition-all first:s3-rounded-l-md first:s3-border-l last:s3-rounded-r-md",
+                isActive && "s3-z-10 s3-ring-1 s3-ring-ring",
                 className,
             )}
             {...props}
         >
             {char}
             {hasFakeCaret && (
-                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                    <div className="animate-caret-blink h-4 w-px bg-foreground duration-1000" />
+                <div className="s3-pointer-events-none s3-absolute s3-inset-0 s3-flex s3-items-center s3-justify-center">
+                    <div className="s3-animate-caret-blink s3-h-4 s3-w-px s3-bg-foreground s3-duration-1000" />
                 </div>
             )}
         </div>

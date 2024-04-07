@@ -21,9 +21,9 @@ export function DrawerDialog({
                 open={open}
                 onOpenChange={(open) => !open && onClose && onClose()}
             >
-                <DialogContent className="p-6 rounded-lg sm:max-w-[425px]">
+                <DialogContent className="s3-p-6 s3-rounded-lg sm:s3-max-w-[425px]">
                     {children}
-                    <DialogFooter className="pt-6 text-center text-xs text-slate-300 sm:justify-center">
+                    <DialogFooter className="s3-pt-6 s3-text-center s3-text-xs s3-text-slate-300 sm:s3-justify-center">
                         powered by simpl3
                     </DialogFooter>
                 </DialogContent>
@@ -34,10 +34,10 @@ export function DrawerDialog({
     return (
         <Drawer open={open} dismissible={false}>
             <DrawerContent>
-                <div className="mt-8 px-6 flex flex-colitems-center justify-center">
+                <div className="s3-mt-8 s3-px-6 s3-flex s3-flex-colitems-center s3-justify-center">
                     {children}
                 </div>
-                <DrawerFooter className="py-6 text-center text-xs text-muted-foreground">
+                <DrawerFooter className="s3-py-6 s3-text-center s3-text-xs s3-text-muted-foreground">
                     powered by Simpl3
                 </DrawerFooter>
             </DrawerContent>
