@@ -1,4 +1,8 @@
-import { setup, assign, fromPromise } from "xstate";
+import { setup, assign } from "xstate";
+
+import { checkId } from "@/actors/checkId";
+import { loginAccount } from "@/actors/loginAccount";
+import { registerAccount } from "@/actors/registerAccount";
 
 export const authMachine = setup({
     types: {
@@ -6,8 +10,9 @@ export const authMachine = setup({
             appId: string;
             pin?: string;
             id?: string;
-            isRegistered?: boolean;
+            // isRegistered?: boolean;
             error?: string;
+            address?: string | null;
         },
         events: {} as
             | { type: "reset" }
@@ -58,61 +63,34 @@ export const authMachine = setup({
             }
         },
         resetContext: assign({
-            id: "",
+            id: undefined,
+            pin: undefined,
+            address: null,
         }),
     },
     actors: {
-        checkId: fromPromise<{ isRegistered: boolean }, { id?: string }>(
-            async ({ input }) => {
-                return await new Promise((resolve) =>
-                    setTimeout(resolve, 2000, {
-                        isRegistered:
-                            input && input.id === "braposo@madesimpl3.com"
-                                ? true
-                                : false,
-                    }),
-                );
-            },
-        ),
-        sendOTP: fromPromise(async () => {
-            return await new Promise((resolve) =>
-                setTimeout(resolve, 2000, true),
-            );
-        }),
-        validatePin: fromPromise<
-            { isValid: boolean },
-            { code?: string; id?: string }
-        >(async ({ input }) => {
-            return await new Promise((resolve) =>
-                setTimeout(resolve, 2000, {
-                    isValid: input.code === "123456" ? true : false,
-                }),
-            );
-        }),
-        validateOTP: fromPromise<
-            { isValid: boolean; isRegistered: boolean },
-            { code?: string; id?: string }
-        >(async ({ input }) => {
-            return await new Promise((resolve) =>
-                setTimeout(resolve, 2000, {
-                    isValid: input && input.code === "12345678" ? true : false,
-                    isRegistered:
-                        input && input.id === "new@madesimpl3.com"
-                            ? true
-                            : false,
-                }),
-            );
-        }),
-        registerAccount: fromPromise<{ isValid: boolean }, { code?: string }>(
-            async ({ input }) => {
-                return await new Promise((resolve) =>
-                    setTimeout(resolve, 2000, {
-                        isValid:
-                            input && input.code === "12345678" ? true : false,
-                    }),
-                );
-            },
-        ),
+        checkId,
+        loginAccount,
+        registerAccount,
+        // sendOTP: fromPromise(async () => {
+        //     return await new Promise((resolve) =>
+        //         setTimeout(resolve, 2000, true),
+        //     );
+        // }),
+        // validateOTP: fromPromise<
+        //     { isValid: boolean; isRegistered: boolean },
+        //     { code?: string; id?: string }
+        // >(async ({ input }) => {
+        //     return await new Promise((resolve) =>
+        //         setTimeout(resolve, 2000, {
+        //             isValid: input && input.code === "12345678" ? true : false,
+        //             isRegistered:
+        //                 input && input.id === "new@madesimpl3.com"
+        //                     ? true
+        //                     : false,
+        //         }),
+        //     );
+        // }),
     },
     guards: {
         pinMatches: function ({ context, event }) {
@@ -147,6 +125,7 @@ export const authMachine = setup({
                 id: "checkId",
                 input: ({ context }) => ({
                     id: context.id,
+                    appId: context.appId,
                 }),
                 onDone: [
                     {
@@ -155,12 +134,12 @@ export const authMachine = setup({
                             return event.output.isRegistered;
                         },
                     },
-                    {
-                        target: "revalidatingDevice",
-                        guard: ({ event }) => {
-                            return event.output.isRegistered;
-                        },
-                    },
+                    // {
+                    //     target: "revalidatingDevice",
+                    //     guard: ({ event }) => {
+                    //         return event.output.isRegistered;
+                    //     },
+                    // },
                     {
                         target: "registeringId",
                     },
@@ -180,21 +159,21 @@ export const authMachine = setup({
             },
         },
 
-        revalidatingDevice: {
-            on: {
-                confirm: {
-                    target: "creatingOTP",
-                },
-                reject: {
-                    target: "idle",
-                },
-            },
-        },
+        // revalidatingDevice: {
+        //     on: {
+        //         confirm: {
+        //             target: "creatingOTP",
+        //         },
+        //         reject: {
+        //             target: "idle",
+        //         },
+        //     },
+        // },
 
         registeringId: {
             on: {
                 confirm: {
-                    target: "creatingOTP",
+                    target: "registeringPin", //creatingOTP
                 },
                 reject: {
                     target: "idle",
@@ -202,28 +181,29 @@ export const authMachine = setup({
             },
         },
 
-        creatingOTP: {
-            invoke: {
-                id: "sendOTP",
-                input: {},
-                onDone: {
-                    target: "waitingOTP",
-                },
-                onError: {
-                    target: "creatingOTP",
-                },
-                src: "sendOTP",
-            },
-        },
+        // creatingOTP: {
+        //     invoke: {
+        //         id: "sendOTP",
+        //         input: {},
+        //         onDone: {
+        //             target: "waitingOTP",
+        //         },
+        //         onError: {
+        //             target: "creatingOTP",
+        //         },
+        //         src: "sendOTP",
+        //     },
+        // },
 
         validatingPin: {
             invoke: {
-                id: "pinValidator",
+                id: "loginAccount",
                 input: ({ event, context }) => {
                     if (event.type === "enterPin") {
                         return {
                             code: event.value,
                             id: context.id,
+                            appId: context.appId,
                         };
                     }
 
@@ -233,8 +213,11 @@ export const authMachine = setup({
                     {
                         target: "loggedIn",
                         guard: ({ event }) => {
-                            return event.output.isValid;
+                            return event.output.pubKey !== null;
                         },
+                        actions: assign({
+                            address: ({ event }) => event.output.pubKey,
+                        }),
                     },
                     {
                         target: "waitingPin",
@@ -249,63 +232,60 @@ export const authMachine = setup({
                         type: "saveError",
                     },
                 },
-                src: "validatePin",
+                src: "loginAccount",
             },
         },
 
-        waitingOTP: {
-            on: {
-                enterOTP: {
-                    target: "validatingOTP",
-                },
-                retry: {
-                    target: "registeringId",
-                },
-            },
-        },
+        // waitingOTP: {
+        //     on: {
+        //         enterOTP: {
+        //             target: "validatingOTP",
+        //         },
+        //         retry: {
+        //             target: "registeringId",
+        //         },
+        //     },
+        // },
 
-        validatingOTP: {
-            invoke: {
-                id: "otpValidator",
-                input: ({ event, context }) => {
-                    if (event.type === "enterOTP") {
-                        return {
-                            code: event.value,
-                            id: context.id,
-                        };
-                    }
+        // validatingOTP: {
+        //     invoke: {
+        //         id: "otpValidator",
+        //         input: ({ event, context }) => {
+        //             if (event.type === "enterOTP") {
+        //                 return {
+        //                     code: event.value,
+        //                     id: context.id,
+        //                 };
+        //             }
 
-                    return {};
-                },
-                onDone: [
-                    {
-                        target: "waitingPin",
-                        guard: ({ event }) => {
-                            return (
-                                event.output.isValid &&
-                                event.output.isRegistered
-                            );
-                        },
-                    },
-                    {
-                        target: "registeringPin",
-                        guard: ({ event }) => {
-                            return event.output.isValid;
-                        },
-                    },
-                    {
-                        target: "waitingOTP",
-                        actions: assign({
-                            error: "asdafda",
-                        }),
-                    },
-                ],
-                onError: {
-                    target: "waitingOTP",
-                },
-                src: "validateOTP",
-            },
-        },
+        //             return {};
+        //         },
+        //         onDone: [
+        //             {
+        //                 target: "waitingPin",
+        //                 guard: ({ event }) => {
+        //                     return (
+        //                         event.output.isValid &&
+        //                         event.output.isRegistered
+        //                     );
+        //                 },
+        //             },
+        //             {
+        //                 target: "registeringPin",
+        //                 guard: ({ event }) => {
+        //                     return event.output.isValid;
+        //                 },
+        //             },
+        //             {
+        //                 target: "waitingOTP",
+        //             },
+        //         ],
+        //         onError: {
+        //             target: "waitingOTP",
+        //         },
+        //         src: "validateOTP",
+        //     },
+        // },
 
         registeringPin: {
             on: {
@@ -337,24 +317,45 @@ export const authMachine = setup({
             },
             exit: "erasePin",
         },
+
         registeringAccount: {
             invoke: {
                 id: "registerAccount",
-                input: {},
-                onDone: {
-                    target: "waitingPin",
+                input: ({ event, context }) => {
+                    if (event.type === "enterPin") {
+                        return {
+                            code: event.value,
+                            id: context.id,
+                            appId: context.appId,
+                        };
+                    }
+
+                    return {};
                 },
+                onDone: [
+                    {
+                        target: "waitingPin",
+                        guard: ({ event }) => {
+                            return event.output.success;
+                        },
+                    },
+                    {
+                        target: "registeringPin",
+                    },
+                ],
                 onError: {
                     target: "registeringPin",
                 },
                 src: "registerAccount",
             },
         },
+
         loggedIn: {
             after: {
                 "1000": "loggedInIdle",
             },
         },
+
         loggedInIdle: {
             exit: "resetContext",
             on: {

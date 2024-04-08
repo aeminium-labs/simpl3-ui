@@ -3,7 +3,7 @@ import { shallowEqual, useActorRef, useSelector } from "@xstate/react";
 import * as React from "react";
 import { Idle } from "@/components/states/idle";
 import { RegisteringId } from "@/components/states/registeringId";
-import { WaitingOTP } from "@/components/states/waitingOTP";
+// import { WaitingOTP } from "@/components/states/waitingOTP";
 import { RegisteringPin } from "@/components/states/registeringPin";
 import { ConfirmingPin } from "@/components/states/confirmingPin";
 import { WaitingPin } from "@/components/states/waitingPin";
@@ -37,7 +37,7 @@ function Auth({ open, onClose }: { open: boolean; onClose?: () => void }) {
                 <Loading message="Checking your email" />
             )}
             {state.matches("registeringId") && <RegisteringId />}
-            {state.matches("creatingOTP") && (
+            {/* {state.matches("creatingOTP") && (
                 <Loading message="Sending verification code" />
             )}
             {state.matches("waitingOTP") && (
@@ -45,7 +45,7 @@ function Auth({ open, onClose }: { open: boolean; onClose?: () => void }) {
             )}
             {state.matches("validatingOTP") && (
                 <Loading message="Validating code" />
-            )}
+            )} */}
             {state.matches("registeringPin") && <RegisteringPin />}
             {state.matches("confirmingPin") && <ConfirmingPin />}
             {state.matches("registeringAccount") && (
@@ -113,10 +113,10 @@ export function useSimpl3Auth() {
         isLoggedIn,
         openAuth: () => setOpen && setOpen(true),
         logout: () => {
-            console.log("LOGOUT");
             if (isLoggedIn) {
                 actorRef.send({ type: "reset" });
             }
         },
+        getAddress: () => actorRef.getSnapshot().context.address,
     };
 }
