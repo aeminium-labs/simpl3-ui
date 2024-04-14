@@ -7,19 +7,35 @@ export function DrawerDialog({
     children,
     onClose,
     forceDialog = false,
+    className
 }: {
     open: boolean;
     children: React.ReactNode;
     onClose?: () => void;
     forceDialog?: boolean;
+    className?: string;
 }) {
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
+    let content = (
+        <Drawer open={open} dismissible={false}>
+            <DrawerContent>
+                <div className="s3-mt-8 s3-px-6 s3-flex s3-flex-col s3-items-center s3-justify-center">
+                    {children}
+                </div>
+                <DrawerFooter className="s3-py-6 s3-text-center s3-text-xs s3-text-muted-foreground">
+                    powered by Simpl3
+                </DrawerFooter>
+            </DrawerContent>
+        </Drawer>
+    );
+
     if (forceDialog || isDesktop) {
-        return (
+        content = (
             <Dialog
                 open={open}
                 onOpenChange={(open) => !open && onClose && onClose()}
+
             >
                 <DialogContent className="s3-p-6 s3-rounded-lg sm:s3-max-w-[425px]">
                     {children}
@@ -32,15 +48,8 @@ export function DrawerDialog({
     }
 
     return (
-        <Drawer open={open} dismissible={false}>
-            <DrawerContent>
-                <div className="s3-mt-8 s3-px-6 s3-flex s3-flex-col s3-items-center s3-justify-center">
-                    {children}
-                </div>
-                <DrawerFooter className="s3-py-6 s3-text-center s3-text-xs s3-text-muted-foreground">
-                    powered by Simpl3
-                </DrawerFooter>
-            </DrawerContent>
-        </Drawer>
+        <div className={className}>
+            {content}
+        </div>
     );
 }

@@ -31,7 +31,7 @@ function Auth({ open, onClose }: { open: boolean; onClose?: () => void }) {
     const state = useSelector(actorRef, (state) => state, shallowEqual);
 
     return (
-        <DrawerDialog open={open} onClose={onClose} forceDialog={true}>
+        <DrawerDialog open={open} onClose={onClose} className="s3-auth">
             {state.matches("idle") && <Idle />}
             {state.matches("validatingId") && (
                 <Loading message="Checking your email" />
